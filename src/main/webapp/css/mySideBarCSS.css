@@ -1,0 +1,98 @@
+@charset "UTF-8";
+
+.container-all{
+		display: flex;
+		align-items: stretch;
+	}
+	#sidebar{
+		width: 250px;
+		height: 100vh;
+		background-color: #131D47;
+		color: white;
+		transition:1s;	
+	}
+	#sidebar.active{
+		margin-left: -200px;
+	}
+
+	.container-right{
+		background-color: lavender;
+		width: 100%;
+		height: 100vh;
+		padding: 30px;
+	}
+	.container-fluid{
+		width:100%;
+		height: 100vh;
+	}
+	.collapse-btn{
+		position: relative;
+		top: 1%;
+		left: 200px;
+		background-color: #131D47;
+		color: white;
+		border: none;
+		font-size: 30px;
+		padding: 5px;
+	}
+	.collapse-btn:hover{
+		background-color: #131D47;
+		transition: 0.4s;
+	}
+	
+	#sidebar p{
+		text-align: center;
+		font-size: 30px;
+		font-style: italic;
+		padding:  10px;
+	}
+
+	#sidebar ul li a {
+		padding: 10px;
+		font-size: 20px;
+		display: block;
+		text-decoration: none;
+		color: white;
+	}
+	
+	#sidebar ul li a:hover{
+		color: indigo;
+		background: #fff;
+	}
+	.fa{
+		float: right;
+	}
+	
+	ul ul li a {
+		background-color: #88A9D6;
+		font-size: 20px;
+		font-style: italic;
+	}
+	
+
+	ul ul:nth-child(2) li a {
+		background-color: #88A9D6;
+		font-size: 20px;
+		font-style: italic;
+	}
+	
+	
+	@media(max-width:600px){
+		#sidebar{
+			margin-left: -100px;
+			width: 150px;
+			font-size: 20px;
+		}
+		.collapse-btn{
+			position: relative;
+			top: 1%;
+			left: 110px;
+		}
+		#sidebar.active{
+			margin-left: 0px;
+		}
+		#sidebar ul p {
+			font-size: 18px;
+			text-align: left;
+		}
+	}

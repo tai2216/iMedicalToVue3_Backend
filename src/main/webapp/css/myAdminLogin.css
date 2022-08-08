@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+
+.modal-header h3 {
+font-size: 30px;
+/* 置中 */
+position: absolute;
+top: 5%;
+left: 50%;
+transform: translate(-50%, -50%);
+}
+
+
+
+.modal-body form .account,
+.modal-body form .password {
+margin: 30px;
+width: 90%;
+border-radius: 20px;
+}
+
+.remember {
+margin-bottom: 20px;
+}
+
+.modal-body form .btn {
+width: 100%;
+font-size: 25px;
+}
