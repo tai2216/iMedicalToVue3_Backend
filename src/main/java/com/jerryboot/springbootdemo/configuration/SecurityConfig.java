@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		try {
 			//不需要被認證的頁面
 		http.authorizeHttpRequests()
-			.antMatchers("/","/addForm","/Agency/selectAgencyData","/Backstage/downloadImageAgency/**","/Backstage/downloadImageRealAssistiveDevice/**","/goAddForm","/Auxiliary/**","/Agency/**","/ProducePage/*","/Backstage/downloadImageCommodities/*","/Commodities","/messageNavbar","/aboutimedical","/ShoppingCart","/frontMemberLogin","/gosubsidy","/subsidy","/agencyData","/assistiveDevice","/relatedLink","/getNewsForIndexPage","/newsInfo","/newsInfoPage","/login","/Backstage/logout","/Backstage/adminLogin","/Backstage/login","/Backstage/loginSuccess","/Backstage/loginFail","/goEnroll","/enroll").permitAll()
+			.antMatchers("/","/Backstage/checkAccount","/addForm","/Agency/selectAgencyData","/Backstage/downloadImageAgency/**","/Backstage/downloadImageRealAssistiveDevice/**","/goAddForm","/Auxiliary/**","/Agency/**","/ProducePage/*","/Backstage/downloadImageCommodities/*","/Commodities","/messageNavbar","/aboutimedical","/ShoppingCart","/frontMemberLogin","/gosubsidy","/subsidy","/agencyData","/assistiveDevice","/relatedLink","/getNewsForIndexPage","/newsInfo","/newsInfoPage","/login","/Backstage/logout","/Backstage/adminLogin","/Backstage/login","/Backstage/loginSuccess","/Backstage/loginFail","/goEnroll","/enroll").permitAll()
 			.antMatchers(HttpMethod.POST,"/Backstage/logout").permitAll()
 			//前面指定的url必須要有後面的角色才可以訪問
 			.antMatchers(HttpMethod.GET,"/Backstage/").authenticated()
@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.logoutSuccessUrl("/Backstage/adminLogin?logout=true")
 			
 			.and()
+			//.csrf().disable()
 			.exceptionHandling()
 			
 			

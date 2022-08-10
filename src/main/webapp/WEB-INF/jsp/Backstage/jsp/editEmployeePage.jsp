@@ -122,7 +122,7 @@
 						src="${contextRoot}/Backstage/downloadImage/${empId}" /> 
 					<br>
 					<input
-						type="file" name="employeePic"  class="form-control"
+						type="file" name="employeePic" value="${someEmployee.get().employeePhoto }"  class="form-control"
 						aria-describedby="employeePhotoHelp" />
 						
 				

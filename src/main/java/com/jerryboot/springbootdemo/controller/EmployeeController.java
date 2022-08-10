@@ -252,11 +252,18 @@ public class EmployeeController {
 	
 	@RequestMapping("Backstage/checkAccount")
 	@ResponseBody
-	public String checkAccount(@RequestParam("employeeAccount")  String account) {
+	public String checkAccount(@RequestParam("account")  String account) {
+		Employee result = dao.findEmployeeByAccount(account);
+		//若從資料庫中找到此帳號則返回無法使用的字串給前端的check function 
+		//若查無帳號則代表帳號可以使用 返回可使用此帳號的字串
+		if(result!=null) {
+			String no ="此帳號無法使用";
+			return no;
+		}else {
+			String yes= "可使用此帳號";
+			return yes;
+		}
 		
-		
-		
-		return null;
 	}
 	
 	

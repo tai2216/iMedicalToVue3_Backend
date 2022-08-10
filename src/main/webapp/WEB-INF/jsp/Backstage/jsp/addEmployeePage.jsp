@@ -5,6 +5,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="tags" %>
+<%@taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <c:set var="contextRoot" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -111,7 +113,7 @@
 			</div> 
 			
 		<form:form action="addEmployee" modelAttribute="employeeBean"  enctype="multipart/form-data"
-			method="post">
+			method="post"  onsubmit="return checkFlag()">
 			
 			<form:input type="hidden" path="id" />
 			<br>
@@ -124,9 +126,14 @@
 			</div>
 			<hr>
 				<label for="account">帳號* <i class="fas fa-user-tie" aria-hidden="true"></i></label>
-			<div class="form-group" >
-				<form:input type="text" path="employeeAccount"
+			<div class="form-group">
+				<form:input type="text" path="employeeAccount" 
+					name="account" onchange="flag=0" 
 					class="form-control" id="account" aria-describedby="accountHelp" required="required" />
+				<sec:csrfInput />
+				<input name="csrfToken" value="${_csrf.token}" type="hidden">
+				<input class="btn-sm btn-primary" type="button" value="檢查帳號" onclick="check()">
+				<div id="validateMessage"></div>
 			</div>
 	<%-- 		<form:errors path="name" cssClass="error" /> --%>
 	<!-- 		<span id="name.errors" class="error">此帳號已有人使用</span> -->
@@ -234,8 +241,61 @@
 	
 	
 	
+	var flag=0; //0=false 驗證未通過 如果帳號可用則將flag設為1
 	
+	function check(){
+		//抓到id叫做account的html元素命名為變數account
+		let account = $('#account').val();
+		//抓到input元素裡面name叫做csrfToken的元素裡面屬性的value命名為變數token
+		var token =$('input[name="csrfToken"]').attr('value');
+		//console.log(token);
+		
+		//ajax較完整寫法
+		$.ajax({
+			url:"${contextRooot}/iMedical/Backstage/checkAccount",
+			data: {account},
+			method: "POST",
+			//傳入csrf的token以便通過spring security控管
+			headers: {
+				"X-CSRF-Token":token
+			},
+			success: function(re){
+				flag = (re == "可使用此帳號") ? 1 : 0;
+				if(flag){
+					$('#validateMessage').html('<div style="color: green;"><b>此帳號可以使用</b></div>');
+				}else{
+					$('#validateMessage').html('<div style="color: red;"><b>此帳號無法使用，請輸入其他帳號</b></div>');
+				}
+			}
+		});
+//		原本寫法 但因為無法傳入csrf因此改寫為上述
+// 		$.post("${contextRooot}/iMedical/Backstage/checkAccount",{account},function(re){
+
+// 			flag = (re == "可使用此帳號") ? 1 : 0;
+// 			console.log(flag);
+			
+// 			if(flag){
+// 				$('#validateMessage').html('<div style="color: green;"><b>此帳號可以使用</b></div>');
+// 			}else{
+// 				$('#validateMessage').html('<div style="color: red;"><b>此帳號無法使用，請輸入其他帳號</b></div>');
+// 			}
+// 		});
+
+
+
+
+
+
+		
+	}
 	
+	//若flag=0 則在表單送出時會return false阻止提交並印出提示
+	function checkFlag(){
+		if (!flag){
+			$('#validateMessage').html('<div style="color: red;"><b>此帳號無法使用</b></div>');
+			return false;
+		}
+	}
 	
 
 	
