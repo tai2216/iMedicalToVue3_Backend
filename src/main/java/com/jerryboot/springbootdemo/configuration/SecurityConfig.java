@@ -32,42 +32,56 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		try {
 			//不需要被認證的頁面
 		http.authorizeHttpRequests()
-			.antMatchers("/","/Backstage/checkAccount","/addForm","/Agency/selectAgencyData","/Backstage/downloadImageAgency/**","/Backstage/downloadImageRealAssistiveDevice/**","/goAddForm","/Auxiliary/**","/Agency/**","/ProducePage/*","/Backstage/downloadImageCommodities/*","/Commodities","/messageNavbar","/aboutimedical","/ShoppingCart","/frontMemberLogin","/gosubsidy","/subsidy","/agencyData","/assistiveDevice","/relatedLink","/getNewsForIndexPage","/newsInfo","/newsInfoPage","/login","/Backstage/logout","/Backstage/adminLogin","/Backstage/login","/Backstage/loginSuccess","/Backstage/loginFail","/goEnroll","/enroll").permitAll()
-			.antMatchers(HttpMethod.POST,"/Backstage/logout").permitAll()
-			//前面指定的url必須要有後面的角色才可以訪問
-			.antMatchers(HttpMethod.GET,"/Backstage/").authenticated()
-			.antMatchers(HttpMethod.POST,"/Backstage/").authenticated()
-			.antMatchers(HttpMethod.GET,"/Backstage/**").hasAnyAuthority("ROLE_manager")
-			.antMatchers(HttpMethod.POST,"/Backstage/**").hasAnyAuthority("ROLE_manager")
-			//剩下的全都必須要通過驗證
-			.anyRequest().authenticated()
-			.and()
-			.formLogin()
-			.loginPage("/Backstage/adminLogin")
-			.loginProcessingUrl("/Backstage/login")
-			.successForwardUrl("/Backstage/loginSuccess")
-			.failureForwardUrl("/Backstage/adminLogin?error=true")
-			.and()
-			.logout()
-			.invalidateHttpSession(true)
-			.clearAuthentication(true)
-			.deleteCookies("JSESSIONID")
-			.logoutUrl("/Backstage/logout")
+//			.antMatchers("/","/Backstage/checkAccount","/addForm",
+//					"/Agency/selectAgencyData","/Backstage/downloadImageAgency/**",
+//					"/Backstage/downloadImageRealAssistiveDevice/**","/goAddForm",
+//					"/Auxiliary/**","/Agency/**","/ProducePage/*",
+//					"/Backstage/downloadImageCommodities/*","/Commodities","/messageNavbar",
+//					"/aboutimedical","/ShoppingCart","/frontMemberLogin","/gosubsidy","/subsidy",
+//					"/agencyData","/assistiveDevice","/relatedLink","/getNewsForIndexPage",
+//					"/newsInfo","/newsInfoPage","/login","/Backstage/logout",
+//					"/Backstage/adminLogin","/Backstage/login","/Backstage/loginSuccess",
+//					"/Backstage/loginFail","/goEnroll","/enroll","/Employee/PDF",
+//					"Employee/Excel").permitAll()
+//			.antMatchers(HttpMethod.POST,"/Backstage/logout").permitAll()
+//			//前面指定的url必須要有後面的角色才可以訪問
+//			.antMatchers(HttpMethod.GET,"/Backstage/").authenticated()
+//			.antMatchers(HttpMethod.POST,"/Backstage/").authenticated()
+//			.antMatchers(HttpMethod.GET,"/Backstage/**").hasAnyAuthority("ROLE_manager")
+//			.antMatchers(HttpMethod.POST,"/Backstage/**").hasAnyAuthority("ROLE_manager")
+//			//剩下的全都必須要通過驗證
+//			.anyRequest().authenticated()
+//			.and()
+//			.formLogin()
+//			.loginPage("/Backstage/adminLogin")
+//			.loginProcessingUrl("/Backstage/login")
+//			.successForwardUrl("/Backstage/loginSuccess")
+//			.failureForwardUrl("/Backstage/adminLogin?error=true")
+//			.and()
+//			.logout()
+//			.invalidateHttpSession(true)
+//			.clearAuthentication(true)
+//			.deleteCookies("JSESSIONID")
+//			.logoutUrl("/Backstage/logout")
+//			
+//			.logoutSuccessUrl("/Backstage/adminLogin?logout=true")
+//			
+//			.and()
+//			//.csrf().disable()
+//			.exceptionHandling()
+//			
+//			
+//			.and()
+//			.rememberMe()
+//			.userDetailsService(service)
+//			.tokenValiditySeconds(60*60*24*7)
 			
-			.logoutSuccessUrl("/Backstage/adminLogin?logout=true")
-			
-			.and()
-			//.csrf().disable()
-			.exceptionHandling()
-			
-			
-			.and()
-			.rememberMe()
-			.userDetailsService(service)
-			.tokenValiditySeconds(60*60*24*7)
-			
-			
+			//關閉Security時打開這兩行註解 註解上方
+			.anyRequest().permitAll()
+			.and().cors().disable()
+			.csrf().disable()
 			;
+		
 			
 				
 			} catch (Exception e) {

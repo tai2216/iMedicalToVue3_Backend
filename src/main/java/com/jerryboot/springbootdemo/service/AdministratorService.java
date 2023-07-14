@@ -26,8 +26,8 @@ public class AdministratorService {
 	
 	@Autowired
 	private EditLogDao editLogDao;
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	//@Autowired
+	//private BCryptPasswordEncoder encoder;
 	
 	
 	/*
@@ -59,9 +59,9 @@ public class AdministratorService {
 	 * */
 	public void insertAdmin(Administrator admin) {
 		//將輸入的密碼以演算法加密
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String encodedPassword = passwordEncoder.encode(admin.getAdminPassword());
-		admin.setAdminPassword(encodedPassword);
+//		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//		String encodedPassword = passwordEncoder.encode(admin.getAdminPassword());
+//		admin.setAdminPassword(encodedPassword);
 		
 		dao.saveAndFlush(admin);
 	}
@@ -81,9 +81,9 @@ public class AdministratorService {
 	public List<Administrator> checkLogin(String loginAccount,String loginPassword){
 		
 		//使用編碼器將收到的密碼加密後再進入資料庫做比對是否相符
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		String encodedPassword = encoder.encode(loginPassword);
-		List<Administrator> loginResult = dao.findByAccountAndPassword(loginAccount, encodedPassword);
+		//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		//String encodedPassword = encoder.encode(loginPassword);
+		List<Administrator> loginResult = dao.findByAccountAndPassword(loginAccount, loginPassword);
 		
 		if(loginResult!=null) {
 			return loginResult;

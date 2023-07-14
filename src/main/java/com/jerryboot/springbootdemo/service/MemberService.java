@@ -28,8 +28,8 @@ public class MemberService {
 	
 	@Autowired
 	private EditLogDao editLogDao;
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	//@Autowired
+	//private BCryptPasswordEncoder encoder;
 	
 	public List<Member> getAllMember() {
 		return dao.findAll();

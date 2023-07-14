@@ -5,11 +5,12 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-<c:set var="contextRoot" value="${pageContext.request.contextPath}" />
 
+<c:set var="contextRoot" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
+<script src="${contextRoot}/js/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="${contextRoot}/css/mySideBarCSS.css">
 <script src="${contextRoot}/js/mySideBarJS.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
@@ -110,13 +111,16 @@
 		
 		<div
 		style="width: 100%; text-align: center; margin-top: 20px; margin-bottom: 30px;">
-		<form action="../Backstage/searchEmployee">
-			<input name="id" type="search" required="required"
-				style="border-radius: 10px; width: 50%;" placeholder="">
-			<input type="submit" value="查詢" 
-				style="border-style: groove; border-radius: 5px;">
+<%-- 		<form action="../Backstage/searchEmployee"> --%>
+<!-- 			<input name="id" type="search" required="required" -->
+<!-- 				style="border-radius: 10px; width: 50%;" placeholder=""> -->
+<!-- 			<input type="submit" value="查詢"  -->
+<!-- 				style="border-style: groove; border-radius: 5px;"> -->
 
-		</form>
+<%-- 		</form> --%>
+			<form action="" class="search">
+				<input class="" style="width:80%; border-radius: 4px;" type="text" id="myInput" placeholder="搜尋...">
+			</form>
 	</div>
 
 
@@ -124,13 +128,16 @@
 
 	<div
 		style="border: 2px groove; width:100%; background-color:highlighttext; border-radius: 2em; padding: 30px 30px 30px 30px; text-align: center;">
+		<div class="">
+			<h1>員工清單
+				<a class="btn btn-primary" style ="border-right: 0px;" href="${contextRoot}/Employee/PDF">匯出PDF</a>
+				<a class="btn btn-primary" style ="border-right: 0px;" href="${contextRoot}/Employee/Excel">匯出EXCEL</a>
+			</h1>
+		</div>
 
-		<h1>管理全部員工</h1>
 
 
-
-
-		<table class="table table-hover" style="background-color: white;border-width: 2px; border-radius: 3px; ">
+		<table id="myTable" class="table table-hover" style="background-color: white;border-width: 2px; border-radius: 3px; ">
 			<tr
 				style="margin: 30px 30px 30px 30px; background-color: silver; ">
 				<th>員工編號</th>
@@ -150,6 +157,7 @@
 
 
 			<c:forEach var="list" items="${page.content}">
+			<tbody id="myBody">
 				<tr>
 					<td>${list.id}</td>
 					<td> <img style="width: 150px; max-width: 50%;" alt="尚未上傳照片" src="${contextRoot}/Backstage/downloadImage/${list.id}"> </td>
@@ -170,7 +178,7 @@
 						href="${contextRoot}/Backstage/deleteEmployee?id=${list.id}"
 						onclick="return confirm('確認刪除嗎?')">刪除</a></td>
 				</tr>
-
+			</tbody>
 			</c:forEach>
 
 
@@ -233,6 +241,27 @@
 
 
 
+	<!-- JQuery搜尋功能 -->
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#myInput").on("keyup",function(){
+				//抓搜尋欄位的輸入值
+				var value =$(this).val().toLowerCase();
+			$("#myBody tr").filter(function(){
+				//toggle切換功能
+				//indexOf把輸入關鍵字切開 結果>-1就是有找到 結果小於-1就是沒有找到
+				$(this).toggle($(this).text().toLowerCase().indexOf(value)>-1)
+			});
+			
+			
+			
+			});
+		});
+	
+	
+	
+	
+	</script>
 
 
 

@@ -121,9 +121,10 @@
 					<img alt="圖片無法顯示" id="thumbnail" style="width: 150px;"
 						src="${contextRoot}/Backstage/downloadImage/${empId}" /> 
 					<br>
+					<!-- ${someEmployee.get().employeePhoto } -->
 					<input
-						type="file" name="employeePic" value="${someEmployee.get().employeePhoto }"  class="form-control"
-						aria-describedby="employeePhotoHelp" />
+						type="file" name="employeePic"   class="form-control"
+						aria-describedby="employeePhotoHelp" src="${contextRoot}/Backstage/downloadImage/${empId}" />
 						
 				
 			
@@ -184,6 +185,7 @@
 						<form:option value="">選擇職等</form:option>
 						<form:option value="normal,ROLE_normal">一般員工</form:option>
 						<form:option value="admin,normal,ROLE_admin">主管</form:option>
+						<form:option value="admin_normal_ROLE_admin">no comma</form:option>
 					</form:select>
 
 				</div>

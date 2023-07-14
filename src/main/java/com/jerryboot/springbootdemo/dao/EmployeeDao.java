@@ -38,7 +38,12 @@ public interface EmployeeDao extends JpaRepository<Employee, Integer> {
 	@Query("from Employee where employee_account=:account and employee_password=:password ")
 	public List<Employee> findByNameAndPassword(@Param("account") String loginAccount, @Param("password") String loginPassword); 
 		
-	
+	////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
+	///////////////////以下是編輯資料功能
+	////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
+
 	
 	
 	

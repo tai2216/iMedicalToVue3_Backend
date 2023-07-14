@@ -2,6 +2,9 @@ package com.jerryboot.springbootdemo.model;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -171,7 +175,22 @@ public class Employee {
 				+ ", employeeSalary=" + employeeSalary + ", employeeOnboard=" + employeeOnboard + "]";
 	}
 	
-	
+	public Map<Object, Object> toMap(Employee employee){
+		HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
+		hashMap.put("id", employee.id);
+		hashMap.put("employeePhoto", employee.employeePhoto);
+		hashMap.put("employeeAccount", employee.employeeAccount);
+		hashMap.put("employeePassword", employee.employeePassword);
+		hashMap.put("employeeName", employee.employeeName);
+		hashMap.put("employeeRole", employee.employeeRole);
+		hashMap.put("employeePhone", employee.employeePhone);
+		hashMap.put("employeeEmail", employee.employeeEmail);
+		hashMap.put("employeeAddress", employee.employeeAddress);
+		hashMap.put("employeeBirthday", employee.employeeBirthday);
+		hashMap.put("employeeSalary", employee.employeeSalary);
+		hashMap.put("employeeOnboard", employee.employeeOnboard);
+		return hashMap;
+	}
 	
 	
 

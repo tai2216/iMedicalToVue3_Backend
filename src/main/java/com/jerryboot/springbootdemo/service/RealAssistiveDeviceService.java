@@ -28,8 +28,8 @@ public class RealAssistiveDeviceService {
 	
 	@Autowired
 	private EditLogDao editLogDao;
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	//@Autowired
+	//private BCryptPasswordEncoder encoder;
 	
 	
 	/*

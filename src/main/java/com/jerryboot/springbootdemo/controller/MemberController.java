@@ -55,8 +55,8 @@ public class MemberController {
 	private EditLogService editLogService;
 	@Autowired
 	private CommoditiesService cService;
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	//@Autowired
+	//private BCryptPasswordEncoder encoder;
 	
 	private Member newRegister = new Member();
 
@@ -283,8 +283,8 @@ public class MemberController {
 	@PostMapping("/Backstage/editMember")
 	public String editMember(@ModelAttribute("memberBean") Member mem, Authentication logger) {
 		//加密
-		String encodePassword = encoder.encode(mem.getMemberPassword());
-		mem.setMemberPassword(encodePassword);
+		//String encodePassword = encoder.encode(mem.getMemberPassword());
+		//mem.setMemberPassword(encodePassword);
 		
 		
 		Member update = dao.save(mem);

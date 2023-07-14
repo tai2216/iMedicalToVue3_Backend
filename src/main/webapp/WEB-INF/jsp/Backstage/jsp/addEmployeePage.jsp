@@ -128,11 +128,11 @@
 				<label for="account">帳號* <i class="fas fa-user-tie" aria-hidden="true"></i></label>
 			<div class="form-group">
 				<form:input type="text" path="employeeAccount" 
-					name="account" onchange="flag=0" 
+					name="account" onchange="flag=0" oninput="check()"
 					class="form-control" id="account" aria-describedby="accountHelp" required="required" />
 				<sec:csrfInput />
 				<input name="csrfToken" value="${_csrf.token}" type="hidden">
-				<input class="btn-sm btn-primary" type="button" value="檢查帳號" onclick="check()">
+			<!--  	<input class="btn-sm btn-primary" type="button" value="檢查帳號" onclick="check()">  -->
 				<div id="validateMessage"></div>
 			</div>
 	<%-- 		<form:errors path="name" cssClass="error" /> --%>

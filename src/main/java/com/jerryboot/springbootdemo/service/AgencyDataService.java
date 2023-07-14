@@ -27,8 +27,8 @@ public class AgencyDataService {
 	
 	@Autowired
 	private EditLogDao editLogDao;
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	//@Autowired
+	//private BCryptPasswordEncoder encoder;
 	
 	
 	/*

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,15 +63,16 @@ public class EmployeeController {
 		return "Backstage/jsp/allEmployee";
 	}
 	
-	@GetMapping(value="/Backstage/downloadImage/{id}")
+	@RequestMapping(value="/Backstage/downloadImage",
+					method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public ResponseEntity<byte[]> downloadImage(@PathVariable("id") Integer id){
+	public ResponseEntity<byte[]> downloadImage(@RequestParam("id") Integer id){
 		Employee photoById = service.searchEmployeeById(id);
-		
 		byte[] photoFile = photoById.getEmployeePhoto();
 		
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(MediaType.IMAGE_JPEG); //MediaType.IMAGE_JPEG
+		System.out.println("test message");
 		//此陣列物件裡面放的是1.要回傳的物件2.header3.httpstatus回應
 		return new ResponseEntity<byte[]>(photoFile,httpHeaders,HttpStatus.OK);
 	}
@@ -110,7 +113,7 @@ public class EmployeeController {
 							RedirectAttributes redirectAttributes) {
 		List<Employee> result = service.checkLogin(loginUser, loginPassword);
 		httpSession.setAttribute("loginEmployee", result);
-		if(result.isEmpty()==true) {
+		if(result.isEmpty()) {
 			redirectAttributes.addFlashAttribute("loginError", "帳號密碼輸入錯誤，請重新輸入");
 			
 			return "redirect:employeelogin";
