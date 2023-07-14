@@ -1,7 +1,7 @@
-# iMedical
+# iMedicalToVue3_Backend
 
 
 <h3>
-  This is my student project, a Medical service website built with spring boot framework connected with SQL server database, I'm responsible for the administrator management in this project.
+  This is the backend part of the project iMedicalToVue3 (Spring Boot application)
 </h3>
 
