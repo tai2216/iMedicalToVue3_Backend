@@ -9,8 +9,11 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="administrator")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Administrator {
 	
 	@Id

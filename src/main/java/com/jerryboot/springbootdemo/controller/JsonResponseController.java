@@ -1,8 +1,6 @@
 package com.jerryboot.springbootdemo.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,12 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.jerryboot.springbootdemo.dao.AdministratorDao;
 import com.jerryboot.springbootdemo.dao.EmployeeDao;
@@ -39,6 +33,7 @@ import com.jerryboot.springbootdemo.service.EmployeeService;
 import com.jerryboot.springbootdemo.util.UtilStaticFactory;
 
 @RestController
+@CrossOrigin
 public class JsonResponseController {
 	@Autowired
 	private EmployeeService employeeService;
@@ -61,11 +56,13 @@ public class JsonResponseController {
 		return jsonString;
 	}
 	
+	@CrossOrigin(origins="http://localhost:8080")
 	@RequestMapping(value = "/empList", 
-			method = {RequestMethod.POST,RequestMethod.GET},
+			method = {RequestMethod.GET},
 			produces = {"application/json"})
 	@ResponseBody
 	public Map<Integer,Object> getEmployeeList() {
+		System.out.println("進入/empList");
 		List<Employee> list = employeeDao.findAll();
 		Map<Integer,Object> map = new HashMap();
 		for(int i=0;i<list.size()-1;i++) {
@@ -75,9 +72,33 @@ public class JsonResponseController {
 	}
 	
 	@RequestMapping(value="/login",
+					method=RequestMethod.POST,
+					produces= {"application/json"})
+	public Map<String,Object> jwtLogin(HttpServletRequest req,HttpServletResponse res,Authentication authResult){
+		Map<String,Object> responseData = new HashMap();
+		System.out.println("經過/login");
+		System.out.println("Remember Me: "+req.getParameter("rememberMe"));
+		
+		if(res.getHeader("Authorization")!=null&res.getStatus()==HttpServletResponse.SC_OK) {
+			responseData.put("message", "Login Success!");
+			responseData.put("jwtToken", res.getHeader("Authorization"));
+			responseData.put("loginUserName", res.getHeader("loginUserName"));
+			return responseData;
+		}else {
+			responseData.put("message", "Login Failed! Please try again");
+			responseData.put("loginUserName","");
+			res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return responseData;
+		}
+		
+	}
+	
+	@RequestMapping(value="/login2",
 					method= RequestMethod.POST,
 					produces= {"application/json"})
-	public Map<String, Object> logIn(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public Map<String, Object> logIn(HttpServletRequest request, HttpServletResponse response, HttpSession session,@RequestBody String requestBody) {
+		System.out.println("requestBody: "+requestBody);
+		
 		String loginAccount = request.getParameter("username");
 		String loginPassword = request.getParameter("password");
 		String rememberMe = request.getParameter("rememberMe");
@@ -91,12 +112,12 @@ public class JsonResponseController {
 		boolean rememberLogin = !loginResult.isEmpty()&loginResult!=null & rememberMe.equals("true");
 		//取得客戶端的網域 後續設置cookie路徑使用 ex: http://localhost:8080/
 		String clientPath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/";
+		Map<String, Object> map = new HashMap();
 		if(rememberLogin) {
 			Cookie cookie = new Cookie("login", "true");
 			cookie.setPath(clientPath);
 			cookie.setMaxAge(cookie.getMaxAge());
 			response.addCookie(cookie);
-			Map<String, Object> map = new HashMap();
 			map.put("token", "aaasvsv4991sv");
 			map.put("message", "Log In Success!");
 			map.put("loginEmployee", loginResult);
@@ -106,7 +127,6 @@ public class JsonResponseController {
 			cookie.setPath(clientPath);
 			cookie.setMaxAge(60*30);
 			response.addCookie(cookie);
-			Map<String, Object> map = new HashMap();
 			map.put("token", "aaasvsv4991sv");
 			map.put("message", "Log In Success!");
 			map.put("loginEmployee", loginResult);
@@ -114,7 +134,6 @@ public class JsonResponseController {
 		}
 		else {
 			//response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			Map<String, Object> map = new HashMap();
 			map.put("message", "Log In Failed, please check again");
 			return map;
 		}

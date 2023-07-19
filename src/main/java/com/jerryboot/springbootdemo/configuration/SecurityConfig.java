@@ -3,7 +3,6 @@ package com.jerryboot.springbootdemo.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -12,6 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+//import com.jerryboot.springbootdemo.filter.CorsFilter;
+import com.jerryboot.springbootdemo.filter.JWTAuthenticationFilter;
+import com.jerryboot.springbootdemo.filter.JWTLoginFilter;
+
 //繼承 WebSecurityConfigurerAdapter才可自訂登入邏輯
 @Configuration
 @EnableWebSecurity
@@ -19,11 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private UserDetailsService service;
-	
 
-	
-	
-
+//	@Autowired
+//	private CorsFilter corsFilter;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
@@ -31,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			
 		try {
 			//不需要被認證的頁面
-		http.authorizeHttpRequests()
+//		http.authorizeHttpRequests()
 //			.antMatchers("/","/Backstage/checkAccount","/addForm",
 //					"/Agency/selectAgencyData","/Backstage/downloadImageAgency/**",
 //					"/Backstage/downloadImageRealAssistiveDevice/**","/goAddForm",
@@ -77,11 +78,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //			.tokenValiditySeconds(60*60*24*7)
 			
 			//關閉Security時打開這兩行註解 註解上方
-			.anyRequest().permitAll()
-			.and().cors().disable()
+//			http.cors().disable();
+//			http.csrf().disable();
+			
+			http
+			//.addFilterBefore(corsFilter, (Class<? extends Filter>) ChannelProcessingFilter.class)
+			.addFilter(new JWTLoginFilter(authenticationManager()))
+			.addFilter(new JWTAuthenticationFilter(authenticationManager()))
 			.csrf().disable()
+			.authorizeRequests()
+			.antMatchers("/login","/checkLogin")
+			.permitAll()
+			.anyRequest()
+			.authenticated()
+			.filterSecurityInterceptorOncePerRequest(true)
+			.and()
+			.formLogin()
+			.disable()
+			
+			
 			;
-		
+			
 			
 				
 			} catch (Exception e) {
@@ -148,5 +165,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	public BCryptPasswordEncoder PasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	
+	
 
 }
