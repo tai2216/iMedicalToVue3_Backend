@@ -53,7 +53,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter{
 			   return authenticate;
 			  }catch(AuthenticationException ae) {
 				  System.out.println("驗證失敗");
-				  ae.printStackTrace();
+				  //ae.printStackTrace();
 			  }
 		return null;
 	}

@@ -75,7 +75,7 @@ public class JsonResponseController {
 					method=RequestMethod.POST,
 					produces= {"application/json"})
 	public Map<String,Object> jwtLogin(HttpServletRequest req,HttpServletResponse res,Authentication authResult){
-		Map<String,Object> responseData = new HashMap();
+		Map<String,Object> responseData = new HashMap<>();
 		System.out.println("經過/login");
 		System.out.println("Remember Me: "+req.getParameter("rememberMe"));
 		

@@ -66,25 +66,35 @@ public class EmployeeService {
 	}
 	
     public Workbook createEmployeeWorkbook(List<Employee> empDatas) {
-    	Workbook wb = new XSSFWorkbook();
-    	Sheet sheet = wb.createSheet("employee");
-    	createRowCells(sheet , 0 , EmployeeCellStyle.HEADER_CELL.createCellStyle(wb) ,
-	    				   "ID","Name","Account","Role" , "Phone" , "Email",
-	    				   "Address","Birthday","Salary","Onboard");
-    	for(int i =1;i <empDatas.size()-1;i++) {
+    	Workbook wb = null;
+    	try{
+    		wb = new XSSFWorkbook();
+    		Sheet sheet = wb.createSheet("employee");
+    		createRowCells(sheet , 0 , EmployeeCellStyle.HEADER_CELL.createCellStyle(wb) ,
+    				"ID","Name","Account","Role" , "Phone" , "Email",
+    				"Address","Birthday","Salary","Onboard");
+    		for(int i =1;i <empDatas.size()-1;i++) {
 //    		for (Employee data:empDatas) {
 //    			wb.getSheet("employee").setRowBreak(i);
 //    		}
-    		for(Employee empItem:empDatas) {		    	
-		    	createRowCells(sheet ,i++ ,EmployeeCellStyle.NORMAL_CELL.createCellStyle(wb) ,
-		    			empItem.getId().toString() ,empItem.getEmployeeName(),
-		    			empItem.getEmployeeAccount(),empItem.getEmployeeRole(),
-		    			empItem.getEmployeePhone() ,empItem.getEmployeeEmail(),
-		    			empItem.getEmployeeAddress(),empItem.getEmployeeBirthday().toString(),
-		    			empItem.getEmployeeSalary().toString(),
-		    			empItem.getEmployeeOnboard().toString()
-		    			);
-	    	}
+    			for(Employee empItem:empDatas) {		    	
+    				createRowCells(sheet ,i++ ,EmployeeCellStyle.NORMAL_CELL.createCellStyle(wb) ,
+    						empItem.getId().toString() ,empItem.getEmployeeName(),
+    						empItem.getEmployeeAccount(),empItem.getEmployeeRole(),
+    						empItem.getEmployeePhone() ,empItem.getEmployeeEmail(),
+    						empItem.getEmployeeAddress(),empItem.getEmployeeBirthday().toString(),
+    						empItem.getEmployeeSalary().toString(),
+    						empItem.getEmployeeOnboard().toString()
+    						);
+    			}
+    		}
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		try {
+				wb.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
     	}
     		
     	return wb;
@@ -197,7 +207,7 @@ public class EmployeeService {
 			employee.setEmployeeBirthday(employeeData.getEmployeeBirthday());
 			employee.setEmployeeSalary(employeeData.getEmployeeSalary());
 			employee.setEmployeeOnboard(employeeData.getEmployeeOnboard());
-			dao.save(employee);
+			dao.saveAndFlush(employee);
 			return true;
 		}
 		return false;

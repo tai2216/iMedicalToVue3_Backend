@@ -41,20 +41,21 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
 		String token = request.getHeader("Authorization");
 		if (token != null) {
 			System.out.println("Token != null : "+token);
-		 // parse the token.
-		String user = Jwts.parser()
-						.setSigningKey("MyJwtSecret")
-						.parseClaimsJws(token.replace("Bearer ", ""))
-						.getBody()
-						.getSubject();
-		if (user != null) {
-			System.out.println("user!= null"+user.toString());
-			return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-		}else{
-			System.out.println("JWTAuthenticationFilter:未找到該使用者");
-		}
+			// parse the token.
+			String user = Jwts.parser()
+							.setSigningKey("MyJwtSecret")
+							.parseClaimsJws(token.replace("Bearer ", ""))
+							.getBody()
+							.getSubject();
+			if (user != null) {
+				System.out.println("user!= null"+user.toString());
+				return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+			}else{
+				System.out.println("JWTAuthenticationFilter:未找到該使用者");
+			}
 			
 		  return null;
+		  
 		}
 		
 		return null;

@@ -18,7 +18,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.jerryboot.springbootdemo.dao.EmployeeDao;
 import com.jerryboot.springbootdemo.model.Employee;
@@ -33,6 +35,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:8080")
 public class JasperController {
 	@Autowired
 	private EmployeeService employeeService;
@@ -40,10 +43,14 @@ public class JasperController {
 	private EmployeeDao employeeDao;
 	
 	
-	@GetMapping("/Employee/PDF")
+	@PostMapping("/Employee/PDF")
 	public ResponseEntity<byte[]> generateEmployeePDF(HttpServletRequest request) throws Exception, JRException, IOException, NoSuchFileException {
+		System.out.println("進入/Employee/PDF");
 		JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(employeeDao.findAll());
-		JasperReport compileReport = JasperCompileManager.compileReport(new FileInputStream("src/main/webapp/WEB-INF/jasper_report/Lab_1.jrxml"));
+		JasperReport compileReport = null;
+		try (FileInputStream fis = new FileInputStream("src/main/webapp/WEB-INF/jasper_report/Lab_1.jrxml")){
+			compileReport = JasperCompileManager.compileReport(fis);
+		}
 		HashMap<String, Object> map = new HashMap<>();
 		
 		//Get the path to put it in the parameter "jasper_report_real_path"
@@ -59,7 +66,7 @@ public class JasperController {
 		return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
 	}
 	
-	@GetMapping("/Employee/Excel")
+	@PostMapping("/Employee/Excel")
 	public void generateEmployeeExcel(HttpServletResponse response) throws Exception, JRException {
 		List<Employee> empDatas = employeeDao.findAll();
 		
